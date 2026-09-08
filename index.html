@@ -1,4 +1,5 @@
 <!doctype html>
+
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -45,6 +46,7 @@ body{
     transform:translate(-50%,-50%);
     width:72%;
     text-align:center;
+    z-index:10;
 }
 
 .label{
@@ -57,6 +59,7 @@ body{
 
 .btn{
     position:relative;
+    z-index:20;
     width:100%;
     min-height:58px;
     border:1px solid rgba(255,70,70,.9);
@@ -67,6 +70,8 @@ body{
     letter-spacing:2px;
     font-size:clamp(15px,4vw,22px);
     cursor:pointer;
+    pointer-events:auto;
+    touch-action:manipulation;
     box-shadow:
         0 0 22px rgba(210,0,0,.35),
         inset 0 0 18px rgba(255,80,80,.12);
@@ -79,6 +84,7 @@ body{
     inset:-5px;
     border:1px solid rgba(255,30,30,.25);
     animation:ring 2s infinite;
+    pointer-events:none;
 }
 
 .btn:disabled{
@@ -129,6 +135,7 @@ body{
     top:-5%;
     opacity:0;
     pointer-events:none;
+    z-index:1;
 }
 
 .screen.active .scan{
@@ -166,6 +173,7 @@ body{
     color:#f2f2f2;
     letter-spacing:2px;
     text-shadow:0 0 15px rgba(255,0,0,.5);
+    z-index:5;
 }
 
 .grantedMsg .small{
@@ -203,54 +211,67 @@ body{
     }
 }
 </style>
+
 </head>
 
 <body>
 
 <div class="screen" id="screen">
 
-    <div class="scan"></div>
+```
+<div class="scan"></div>
 
-    <div class="access">
+<div class="access">
 
-        <div class="label">
-            SECURE LOCATION ACCESS
-        </div>
-
-        <button class="btn" id="btn">
-            ACCESS LOCATION
-        </button>
-
-        <div class="status" id="status"></div>
-
+    <div class="label">
+        SECURE LOCATION ACCESS
     </div>
 
-    <div class="grantedMsg">
-        <div class="small">
-            SECURITY CLEARANCE
-        </div>
+    <button
+        class="btn"
+        id="btn"
+        type="button"
+        onclick="accessLocation()">
+        ACCESS LOCATION
+    </button>
 
-        <div class="big">
-            ACCESS GRANTED
-        </div>
+    <div class="status" id="status"></div>
 
-        <div class="small" style="margin-top:10px">
-            OPENING LOCATION...
-        </div>
+</div>
+
+<div class="grantedMsg">
+
+    <div class="small">
+        SECURITY CLEARANCE
     </div>
+
+    <div class="big">
+        ACCESS GRANTED
+    </div>
+
+    <div class="small" style="margin-top:10px">
+        OPENING LOCATION...
+    </div>
+
+</div>
+```
 
 </div>
 
 <script>
 
-const maps =
-"https://www.google.com/maps/dir/?api=1&destination=-2.9244800,-79.0437770";
+function accessLocation(){
 
-const screen = document.getElementById("screen");
-const btn = document.getElementById("btn");
-const status = document.getElementById("status");
+    const maps =
+    "https://www.google.com/maps/dir/?api=1&destination=-2.9244800,-79.0437770";
 
-btn.addEventListener("click", function(){
+    const screen = document.getElementById("screen");
+    const btn = document.getElementById("btn");
+    const status = document.getElementById("status");
+
+    if(!screen || !btn || !status){
+        return;
+    }
 
     btn.disabled = true;
 
@@ -258,23 +279,21 @@ btn.addEventListener("click", function(){
 
     screen.classList.add("active");
 
-
     setTimeout(function(){
 
         status.textContent = "ACCESS GRANTED";
 
         screen.classList.add("granted");
 
-    }, 850);
-
+    },850);
 
     setTimeout(function(){
 
-        window.location.assign(maps);
+        window.location.href = maps;
 
-    }, 1450);
+    },1450);
 
-});
+}
 
 </script>
 
